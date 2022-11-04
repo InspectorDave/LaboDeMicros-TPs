@@ -17,15 +17,15 @@ start:
 	sbi DDRB, PIN_LED ;setea el pin dado de B como out
 	blink: 
 		sbi PORTB, PIN_LED ;prendo el pin de B
-		call delay8000cicles ;espero 1 segundo
+		call delay8Mcicles ;espero 1 segundo
 		cbi PORTB, PIN_LED ;apago el pin de B
-		call delay8000cicles ;espero 1 segundo
-    rjmp blink
+		call delay8Mcicles ;espero 1 segundo
+		rjmp blink
 
-delay8000cicles:
+delay8Mcicles:
 	ldi r18, 41
 	ldi r19, 150
-	ldi r20, 128
+	ldi r20, 125
 	L1:
 		dec r20
 		brne L1
@@ -33,4 +33,5 @@ delay8000cicles:
 		brne L1
 		dec r18
 		brne L1
+	nop
 	ret
