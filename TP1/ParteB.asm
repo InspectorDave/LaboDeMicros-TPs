@@ -28,11 +28,11 @@ start:
 		rjmp loopOff
 
 	loopOn:
-		call blink
 		in r17, PINB
 		andi r17, 0b00000010
 		cpi r17, 0b00000010
 		breq loopOff
+		call blink
 		rjmp loopOn
 
 blink: 
@@ -43,9 +43,9 @@ blink:
 	ret
 
 delay8Mcicles:
-	ldi r18, 1 ;41
+	ldi r18, 41 ;41
 	ldi r19, 150
-	ldi r20, 1 ;125
+	ldi r20, 125 ;125
 	L1:
 		dec r20
 		brne L1
