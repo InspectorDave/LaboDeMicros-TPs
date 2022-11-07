@@ -17,20 +17,23 @@
 
 start:
 	sbi DDRB, PIN_LED ;setea el pin dado de B como out
-	cbi DDRB, PIN_ON ;setea el pin dado de B como in
+	cbi DDRB, PIN_ON  ;setea el pin dado de B como in
 	cbi DDRB, PIN_OFF ;setea el pin dado de B como in
+
+	sbi PORTB, PIN_ON  ;prendo las resistencias de pull-up
+	sbi PORTB, PIN_OFF ;prendo las resistencias de pull-up
 
 	loopOff:
 		in r17, PINB
 		andi r17, 0b00000001
-		cpi r17, 0b00000001
+		cpi r17, 0b00000000
 		breq loopOn
 		rjmp loopOff
 
 	loopOn:
 		in r17, PINB
 		andi r17, 0b00000010
-		cpi r17, 0b00000010
+		cpi r17, 0b00000000
 		breq loopOff
 		call blink
 		rjmp loopOn
@@ -43,9 +46,9 @@ blink:
 	ret
 
 delay8Mcicles:
-	ldi r18, 41 ;41
+	ldi r18, 41
 	ldi r19, 150
-	ldi r20, 125 ;125
+	ldi r20, 125
 	L1:
 		dec r20
 		brne L1
