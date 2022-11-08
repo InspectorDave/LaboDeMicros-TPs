@@ -8,21 +8,20 @@
 
 .def aux = r16
 .def eepromAddress = r21
-.def dispValue = r17 ;The value that will be displayed
+.def dispValue = r17 ;El valor que se mostrará
 
 .cseg
 .org 0x0000
-	rjmp	inicio
+	rjmp start
 .org INT0addr
-	cli
 	rjmp handlerIntExt0
 .org INT1addr
-	cli
 	rjmp handlerIntExt1
 
 .org INT_VECTORS_SIZE
 
-inicio:
+start:
+	cli
 	rcall configure_ports
 	rcall configure_int0
 	rcall configure_int1
@@ -30,41 +29,10 @@ inicio:
 	rcall enable_int1
 
 	call writeLettersInEEprom
+	call cicleSegments
 
-	;call cicleSegments
+	ldi dispValue,0
 	call displayValue
-
-	call display1
-	call delay8Mcicles
-	call display2
-	call delay8Mcicles
-	call display3
-	call delay8Mcicles
-	call display4
-	call delay8Mcicles
-	call display5
-	call delay8Mcicles
-	call display6
-	call delay8Mcicles
-	call display7
-	call delay8Mcicles
-	call display8
-	call delay8Mcicles
-	call display9
-	call delay8Mcicles
-	call displayA
-	call delay8Mcicles
-	call displayB
-	call delay8Mcicles
-	call displayC
-	call delay8Mcicles
-	call displayD
-	call delay8Mcicles
-	call displayE
-	call delay8Mcicles
-	call displayF
-	call delay8Mcicles
-
 
 	sei
 
@@ -111,7 +79,7 @@ handlerIntExt0:
 	breq reti0
 	inc dispValue
 	call displayValue
-	sei
+	call delay8Mcicles ;Espero medio segundo para evitar considerar rebotes del botón
 	reti0: reti
 
 handlerIntExt1:
@@ -119,7 +87,7 @@ handlerIntExt1:
 	breq reti1
 	dec dispValue
 	call displayValue
-	sei
+	call delay8Mcicles ;Espero medio segundo para evitar considerar rebotes del botón
 	reti1: reti
 
 delay8Mcicles:
