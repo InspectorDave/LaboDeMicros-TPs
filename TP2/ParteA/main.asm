@@ -28,21 +28,58 @@ inicio:
 	rcall configure_int1
 	rcall enable_int0
 	rcall enable_int1
-	sei
 
 	call writeLettersInEEprom
 
-	call cicleSegments
+	;call cicleSegments
 	call displayValue
 
+	call display1
+	call delay8Mcicles
+	call display2
+	call delay8Mcicles
+	call display3
+	call delay8Mcicles
+	call display4
+	call delay8Mcicles
+	call display5
+	call delay8Mcicles
+	call display6
+	call delay8Mcicles
+	call display7
+	call delay8Mcicles
+	call display8
+	call delay8Mcicles
+	call display9
+	call delay8Mcicles
+	call displayA
+	call delay8Mcicles
+	call displayB
+	call delay8Mcicles
+	call displayC
+	call delay8Mcicles
+	call displayD
+	call delay8Mcicles
+	call displayE
+	call delay8Mcicles
+	call displayF
+	call delay8Mcicles
+
+
+	sei
+
 	main_loop:
+		sleep
 		rjmp  main_loop
 
 configure_ports:
 	ldi aux, 0xFF
-	out DDRB,aux
-	cbi DDRD,DDD2
-	cbi DDRD,DDD3
+	out DDRB, aux  ;configuro puerto B como out
+	out DDRC, aux  ;configuro puerto C como out
+	cbi DDRD, DDD2 ;configuro los pines del puerto D como in
+	cbi DDRD, DDD3
+	sbi PORTD, DDD2  ;prendo las resistencias de pull-up de los pines del pureto D
+	sbi PORTD, DDD3 
 	ret
 
 configure_int0: ;por flanco ascendente
@@ -86,7 +123,7 @@ handlerIntExt1:
 	reti1: reti
 
 delay8Mcicles:
-	ldi r18, 1
+	ldi r18, 41
 	ldi r19, 150
 	ldi r20, 125
 	L1:
