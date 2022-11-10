@@ -1,4 +1,3 @@
-;
 ;EEpromReadWriteSubroutines.asm
 ;
 ;Created: 6/11/2022 01:51:59
@@ -7,26 +6,30 @@
 ;Se escribe/lee en eepromAdress se 'escribe desde/lee a' aux
 
 eepromWrite:
-	sbic EECR,EEPE          ;CHECK IF EEPROM AVAILABLE
-	rjmp eepromWrite        ;LOOP-BACK IF NOT AVAILABLE
+	sei                     ;disable interruptions
+	sbic EECR,EEPE          ;check if EEprom busy
+	rjmp eepromWrite        ;check until not busy
 
-	out EEARL,eepromAddress ;EPROM ADDRESS
-	out EEDR,aux            ;EEPROM DATA TO WRITE
+	out EEARL,eepromAddress ;set up the address
+	out EEDR,aux            ;EEprom data to write
 
-	sbi EECR,EEMPE          ;ENABLE EEPROM
-	sbi EECR,EEPE           ;ENABLE WRITE, en este paso se escribe la EEPROM
+	sbi EECR,EEMPE          ;enable EEprom
+	sbi EECR,EEPE           ;enable write, here the writing takes place
 
-	inc eepromAddress       ;INCREMENT EEPROM ADDRESS
+	inc eepromAddress       ;increment EEprom address
+	cli                     ;enable interruptions
 	ret
 
 eepromRead:
-	sbic EECR,EEPE          ;CHECK IF EEPROM BUSY
-	rjmp eepromRead         ;ITS BUSY SO WE WAIT
+	sei						;disable interruptions
+	sbic EECR,EEPE          ;check if EEprom busy
+	rjmp eepromRead         ;check until not busy
 
-	out EEARL,eepromAddress ;SET-UP THE ADDRESS
+	out EEARL,eepromAddress ;set up the address
 
-	sbi EECR,EERE           ;SET-UP TO READ
-	in  aux,EEDR              ;READ THE DATA REGISTER
+	sbi EECR,EERE           ;set up for reading
+	in  aux,EEDR            ;read the data register
 
-	inc eepromAddress       ;INCREMENT EEPROM ADDRESS
+	inc eepromAddress       ;inc EEprom address
+	cli                     ;enable interruptions
 	ret

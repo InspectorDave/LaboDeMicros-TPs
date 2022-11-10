@@ -8,7 +8,7 @@
 
 .def aux = r16
 .def eepromAddress = r21
-.def dispValue = r17 ;El valor que se mostrará
+.def dispValue = r17 ;el valor que se mostrará
 
 .cseg
 .org 0x0000
@@ -50,15 +50,17 @@ configure_ports:
 	sbi PORTD, DDD3 
 	ret
 
-configure_int0: ;por flanco ascendente
+configure_int0: ;por flanco descendente
 	lds  aux, EICRA
-	ori  aux, (1 << ISC00) | (1 << ISC01)
+	ori  aux, (1 << ISC01)
+	andi aux, ~( (1 << ISC00) )
 	sts  EICRA, aux
 	ret
 
-configure_int1: ;por flanco ascendente
+configure_int1: ;por flanco descendente
 	lds  aux, EICRA
-	ori  aux, (1 << ISC10) | (1 << ISC11)
+	ori  aux, (1 << ISC11)
+	andi aux, ~( (1 << ISC10) )
 	sts  EICRA, aux
 	ret
 
@@ -75,22 +77,34 @@ enable_int1:
 	ret
 
 handlerIntExt0:
-	cpi dispValue, 0xF
+	call delay16kcicles ;compruebo que no haya sido un error
+	in aux, PIND
+	andi aux, 0b00000100
+	cpi aux, 0b00000000
+	brne reti1
+	
+	cpi dispValue, 0xF ;compruebo que pueda seguir incrementando
 	breq reti0
+	
 	inc dispValue
 	call displayValue
-	call delay8Mcicles ;Espero medio segundo para evitar considerar rebotes del botón
 	reti0: reti
 
 handlerIntExt1:
-	cpi dispValue, 0x0
+	call delay16kcicles ;compruebo que no haya sido un error
+	in aux, PIND
+	andi aux, 0b00001000
+	cpi aux, 0b00000000
+	brne reti1
+
+	cpi dispValue, 0x0 ;compruebo que pueda seguir incrementando
 	breq reti1
+
 	dec dispValue
 	call displayValue
-	call delay8Mcicles ;Espero medio segundo para evitar considerar rebotes del botón
 	reti1: reti
 
-delay8Mcicles:
+delay8Mcicles: ;0,5s a 16MHz
 	ldi r18, 41
 	ldi r19, 150
 	ldi r20, 125
@@ -101,6 +115,21 @@ delay8Mcicles:
 		brne L1
 		dec r18
 		brne L1
+	nop
+	ret
+
+delay16kcicles: ;1ms a 16MHz
+	ldi r18, 9
+	ldi r19, 30
+	ldi r20, 226
+	L2:
+		dec r20
+		brne L2
+		dec r19
+		brne L2
+		dec r18
+		brne L2
+	nop
 	nop
 	ret
 
