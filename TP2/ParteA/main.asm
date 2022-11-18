@@ -18,7 +18,6 @@
 	.db dispDC, dispDB
 	.db dispEC, dispEB
 	.db dispFC, dispFB
-	.byte 1
 
 .cseg
 .org 0x0000
