@@ -3,47 +3,26 @@
 ;Created: 6/11/2022 01:59:48
 ;Author: Ezequiel Mundani Vegega 
 
-cicleSegments: ;prendo cada led de a uno por 1 segundo
-	ldi aux, segA
-	out PORTC, aux
+cicleLetters: ;prendo cada led de a uno por 1 segundo
+	ldi dispValue, 0xA
+	call displayValue
 	call delay8Mcicles
-
-	ldi aux, segB
-	out PORTC, aux
+	ldi dispValue, 0xB
+	call displayValue
 	call delay8Mcicles
-
-	ldi aux, segC
-	out PORTC, aux
+	ldi dispValue, 0xC
+	call displayValue
 	call delay8Mcicles
-
-	ldi aux, segD
-	out PORTC, aux
+	ldi dispValue, 0xD
+	call displayValue
 	call delay8Mcicles
-
-	ldi aux, segE
-	out PORTC, aux
+	ldi dispValue, 0xE
+	call displayValue
 	call delay8Mcicles
-
-	ldi aux, segF
-	out PORTC, aux
+	ldi dispValue, 0xF
+	call displayValue
 	call delay8Mcicles
-
-	clr aux
-	out PORTC, aux ;limpio el puerto 
-	ldi aux, segG  ;como esto sale por el puerto B, lo corro al pin correspondiente
-	out PORTB, aux
-	call delay8Mcicles
-
-	clr aux        
-	out PORTC, aux ;limpio el puerto C
-	ldi aux, segO  ;como esto sale por el puerto B, lo corro al pin correspondiente
-	out PORTB, aux 
-	call delay8Mcicles
-
-	clr aux
-	out PORTB, aux ;apago todos los LEDs
-	out PORTC, aux ;apago todos los LEDs
-
+	ldi dispValue, 0x0
 	ret
 
 displayValue: 

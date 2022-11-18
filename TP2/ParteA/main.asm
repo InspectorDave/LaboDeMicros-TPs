@@ -37,7 +37,7 @@ start:
 	rcall enable_int0
 	rcall enable_int1
 
-	call cicleSegments
+	call cicleLetters
 
 	ldi dispValue,0
 	call displayValue

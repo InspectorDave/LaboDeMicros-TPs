@@ -4,15 +4,6 @@
 ;Los segmentos desde A hasta F se muestran por el puerto C
 ;Los segmentos G y O por le puerto B.
 ;Por eso hay máscaras repetidas
-.equ segA = 0b00000001
-.equ segB = 0b00000010
-.equ segC = 0b00000100
-.equ segD = 0b00001000
-.equ segE = 0b00010000
-.equ segF = 0b00100000
-.equ segG = 0b00000001
-.equ segO = 0b00000010
-
 .equ disp0C = 0b00111111
 .equ disp1C = 0b00000110
 .equ disp2C = 0b01011011
