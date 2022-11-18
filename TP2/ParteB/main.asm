@@ -30,9 +30,12 @@ start:
 	rcall enable_int1
 
 	call writeLettersInEEprom
-	call cicleSegments
+	call cicleLetters
 
-;	ldi dispValue,0
+	ldi eepromAddress, lastValueAddress
+	call eepromRead
+	mov dispValue, aux
+
 	call displayValue
 
 	sei
@@ -89,6 +92,9 @@ handlerIntExt0:
 	
 	inc dispValue
 	call displayValue
+	mov aux, dispValue
+	ldi eepromAddress,lastValueAddress
+	call eepromWrite
 	reti0: reti
 
 handlerIntExt1:
@@ -103,6 +109,9 @@ handlerIntExt1:
 
 	dec dispValue
 	call displayValue
+	mov aux, dispValue
+	ldi eepromAddress,lastValueAddress
+	call eepromWrite
 	reti1: reti
 
 delay8Mcicles: ;0,5s a 16MHz
