@@ -9,7 +9,16 @@
 .def aux = r16
 .def eepromAddress = r21
 .def dispValue = r17 ;el valor que se mostrará
-.equ lastValueAddress = 0x0C ;EEprom's address where the last value will be saved
+
+.eseg
+.org 0x0000
+	eepromAdrA:	.db dispAC, dispAB
+	eepromAdrB: .db dispBC, dispBB
+	eepromAdrC: .db dispCC, dispCB
+	eepromAdrD: .db dispDC, dispDB
+	eepromAdrE: .db dispEC, dispEB
+	eepromAdrF: .db dispFC, dispFB
+	lastValueAddress: .db 0
 
 .cseg
 .org 0x0000
@@ -29,7 +38,6 @@ start:
 	rcall enable_int0
 	rcall enable_int1
 
-	call writeLettersInEEprom
 	call cicleLetters
 
 	ldi eepromAddress, lastValueAddress

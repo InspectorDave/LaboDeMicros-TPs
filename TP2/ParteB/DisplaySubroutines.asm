@@ -110,7 +110,7 @@ displayValue:
 	displayA:
 		cpi dispValue, 0xA
 		brne displayB
-		ldi eepromAddress,0x0
+		ldi eepromAddress, eepromAdrA
 		call eepromRead 
 		out PORTC, aux
 		call eepromRead 
@@ -119,7 +119,7 @@ displayValue:
 	displayB:
 		cpi dispValue, 0xB
 		brne displayC
-		ldi eepromAddress,0x2
+		ldi eepromAddress, eepromAdrB
 		call eepromRead 
 		out PORTC, aux
 		call eepromRead 
@@ -128,7 +128,7 @@ displayValue:
 	displayC:
 		cpi dispValue, 0xC
 		brne displayD
-		ldi eepromAddress,0x4
+		ldi eepromAddress, eepromAdrC
 		call eepromRead 
 		out PORTC, aux
 		call eepromRead 
@@ -137,7 +137,7 @@ displayValue:
 	displayD:
 		cpi dispValue, 0xD
 		brne displayE
-		ldi eepromAddress,0x6
+		ldi eepromAddress, eepromAdrD
 		call eepromRead 
 		out PORTC, aux
 		call eepromRead 
@@ -146,7 +146,7 @@ displayValue:
 	displayE:
 		cpi dispValue, 0xE
 		brne displayF
-		ldi eepromAddress,0x8
+		ldi eepromAddress, eepromAdrE
 		call eepromRead 
 		out PORTC, aux
 		call eepromRead 
@@ -155,7 +155,7 @@ displayValue:
 	displayF:
 		cpi dispValue, 0xF
 		brne displayError
-		ldi eepromAddress,0xA
+		ldi eepromAddress, eepromAdrF
 		call eepromRead 
 		out PORTC, aux
 		call eepromRead 
@@ -166,36 +166,3 @@ displayValue:
 		rjmp display0
 	ret0:
 		ret
-
-writeLettersInEEprom:
-	ldi eepromAddress,0x0
-	ldi aux, dispAC
-	call eepromWrite
-	ldi aux, dispAB
-	call eepromWrite
-
-	ldi aux, dispBC
-	call eepromWrite
-	ldi aux, dispBB
-	call eepromWrite
-
-	ldi aux, dispCC
-	call eepromWrite
-	ldi aux, dispCB
-	call eepromWrite
-
-	ldi aux, dispDC
-	call eepromWrite
-	ldi aux, dispDB
-	call eepromWrite
-
-	ldi aux, dispEC
-	call eepromWrite
-	ldi aux, dispEB
-	call eepromWrite
-
-	ldi aux, dispFC
-	call eepromWrite
-	ldi aux, dispFB
-	call eepromWrite
-	ret
