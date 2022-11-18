@@ -10,6 +10,16 @@
 .def eepromAddress = r21
 .def dispValue = r17 ;el valor que se mostrará
 
+.eseg
+.org 0x0000
+	.db dispAC, dispAB
+	.db dispBC, dispBB
+	.db dispCC, dispCB
+	.db dispDC, dispDB
+	.db dispEC, dispEB
+	.db dispFC, dispFB
+	.byte 1
+
 .cseg
 .org 0x0000
 	rjmp start
@@ -28,7 +38,6 @@ start:
 	rcall enable_int0
 	rcall enable_int1
 
-	call writeLettersInEEprom
 	call cicleSegments
 
 	ldi dispValue,0

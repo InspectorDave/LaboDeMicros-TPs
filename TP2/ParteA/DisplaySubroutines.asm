@@ -214,36 +214,3 @@ displayF:
 	call eepromRead 
 	out PORTB, aux
 	ret
-
-writeLettersInEEprom:
-	ldi eepromAddress,0x0
-	ldi aux, dispAC
-	call eepromWrite
-	ldi aux, dispAB
-	call eepromWrite
-
-	ldi aux, dispBC
-	call eepromWrite
-	ldi aux, dispBB
-	call eepromWrite
-
-	ldi aux, dispCC
-	call eepromWrite
-	ldi aux, dispCB
-	call eepromWrite
-
-	ldi aux, dispDC
-	call eepromWrite
-	ldi aux, dispDB
-	call eepromWrite
-
-	ldi aux, dispEC
-	call eepromWrite
-	ldi aux, dispEB
-	call eepromWrite
-
-	ldi aux, dispFC
-	call eepromWrite
-	ldi aux, dispFB
-	call eepromWrite
-	ret
