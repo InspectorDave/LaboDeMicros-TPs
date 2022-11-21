@@ -16,7 +16,6 @@ eepromWrite:
 	sbi EECR,EEMPE          ;enable EEprom
 	sbi EECR,EEPE           ;enable write, here the writing takes place
 
-	inc eepromAddress       ;increment EEprom address
 	cli                     ;enable interruptions
 	ret
 
@@ -30,6 +29,5 @@ eepromRead:
 	sbi EECR,EERE           ;set up for reading
 	in  aux,EEDR            ;read the data register
 
-	inc eepromAddress       ;inc EEprom address
 	cli                     ;enable interruptions
 	ret

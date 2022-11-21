@@ -7,17 +7,13 @@
 .include "7SegmentsDisplayDef.inc"
 
 .def aux = r16
+.def aux2= r22
 .def eepromAddress = r21
 .def dispValue = r17 ;el valor que se mostrará
 
 .eseg
 .org 0x0000
-	.db dispAC, dispAB
-	.db dispBC, dispBB
-	.db dispCC, dispCB
-	.db dispDC, dispDB
-	.db dispEC, dispEB
-	.db dispFC, dispFB
+	.db dispA, dispB, dispC, dispD, dispE, dispF
 
 .cseg
 .org 0x0000
@@ -49,12 +45,14 @@ start:
 		rjmp  main_loop
 
 configure_ports:
-	ldi aux, 0xFF
-	out DDRB, aux  ;configuro puerto B como out
-	out DDRC, aux  ;configuro puerto C como out
-	cbi DDRD, DDD2 ;configuro los pines del puerto D como in
+	ldi aux, 0x0F
+	out DDRC, aux  ;configuro el nibble más bajo como salida de C
+	ldi aux, 0xF0
+	out DDRD, aux  ;configuro el nibble más alto como salida de D
+
+	cbi DDRD, DDD2 ;configuro los pines del puerto D como entrada
 	cbi DDRD, DDD3
-	sbi PORTD, DDD2  ;prendo las resistencias de pull-up de los pines del pureto D
+	sbi PORTD, DDD2  ;prendo las resistencias de pull-up de los pines del puerto D
 	sbi PORTD, DDD3 
 	ret
 
@@ -143,3 +141,6 @@ delay16kcicles: ;1ms a 16MHz
 
 .include "EEpromReadWriteSubroutines.asm"
 .include "DisplaySubroutines.asm"
+
+displayTable:
+	.db disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7, disp8, disp9

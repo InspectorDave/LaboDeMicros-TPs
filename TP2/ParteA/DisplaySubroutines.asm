@@ -3,7 +3,7 @@
 ;Created: 6/11/2022 01:59:48
 ;Author: Ezequiel Mundani Vegega 
 
-cicleLetters: ;prendo cada led de a uno por 1 segundo
+cicleLetters: ;muestro las letras de la A a la F
 	ldi dispValue, 0xA
 	call displayValue
 	call delay8Mcicles
@@ -22,11 +22,10 @@ cicleLetters: ;prendo cada led de a uno por 1 segundo
 	ldi dispValue, 0xF
 	call displayValue
 	call delay8Mcicles
-	ldi dispValue, 0x0
 	ret
 
 displayValue: 
-;Establece el PORTC y PORTB con los bits correspondientes
+;Establece el PORTC y PORTD con los bits correspondientes
 ;al número que se quiere mostrar
 	cpi dispValue, 0x0
 	breq display0
@@ -62,74 +61,54 @@ displayValue:
 	breq displayF_
 
 display0:
-	ldi aux, disp0C
-	out PORTC, aux
-	ldi aux, disp0B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2))
+	ldi zh, high((displayTable*2))
+	rjmp writePorts1
 
 display1:
-	ldi aux, disp1C
-	out PORTC, aux
-	ldi aux, disp1B
-	out PORTB, aux
-	ret
-
+	ldi zl, low((displayTable*2)+1)
+	ldi zh, high((displayTable*2)+1)
+	rjmp writePorts1
+	
 display2:
-	ldi aux, disp2C
-	out PORTC, aux
-	ldi aux, disp2B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+2)
+	ldi zh, high((displayTable*2)+2)
+	rjmp writePorts1
 
 display3:
-	ldi aux, disp3C
-	out PORTC, aux
-	ldi aux, disp3B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+3)
+	ldi zh, high((displayTable*2)+3)
+	rjmp writePorts1
 
 display4:
-	ldi aux, disp4C
-	out PORTC, aux
-	ldi aux, disp4B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+4)
+	ldi zh, high((displayTable*2)+4)
+	rjmp writePorts1
 
 display5:
-	ldi aux, disp5C
-	out PORTC, aux
-	ldi aux, disp5B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+5)
+	ldi zh, high((displayTable*2)+5)
+	rjmp writePorts1
 
 display6:
-	ldi aux, disp6C
-	out PORTC, aux
-	ldi aux, disp6B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+6)
+	ldi zh, high((displayTable*2)+6)
+	rjmp writePorts1
 
 display7:
-	ldi aux, disp7C
-	out PORTC, aux
-	ldi aux, disp7B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+7)
+	ldi zh, high((displayTable*2)+7)
+	rjmp writePorts1	
 
 display8:
-	ldi aux, disp8C
-	out PORTC, aux
-	ldi aux, disp8B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+8)
+	ldi zh, high((displayTable*2)+8)
+	rjmp writePorts1
 
 display9:
-	ldi aux, disp9C
-	out PORTC, aux
-	ldi aux, disp9B
-	out PORTB, aux
-	ret
+	ldi zl, low((displayTable*2)+9)
+	ldi zh, high((displayTable*2)+9)
+	rjmp writePorts1
 
 ;Los saltos eran demasiado largos así que agrego estos saltos
 ;en el medio
@@ -146,50 +125,58 @@ displayE_:
 displayF_:
 	rjmp displayF
 
+writePorts1:
+	lpm aux, z
+	andi aux, 0x0F
+	in aux2, PORTC
+	andi aux2, 0xF0
+	or aux, aux2
+	out PORTC, aux
+
+	lpm aux, z
+	andi aux, 0xF0
+	in aux2, PORTD
+	andi aux2, 0x0F
+	or aux, aux2
+	out PORTD, aux
+	ret
+
 displayA:
 	ldi eepromAddress,0x0
-	call eepromRead 
-	out PORTC, aux
-	call eepromRead 
-	out PORTB, aux
-	ret
+	rjmp writePorts2
 
 displayB:
 	ldi eepromAddress,0x2
-	call eepromRead 
-	out PORTC, aux
-	call eepromRead 
-	out PORTB, aux
-	ret
+	rjmp writePorts2
 
 displayC:
 	ldi eepromAddress,0x4
-	call eepromRead 
-	out PORTC, aux
-	call eepromRead 
-	out PORTB, aux
-	ret
+	rjmp writePorts2
 
 displayD:
 	ldi eepromAddress,0x6
-	call eepromRead 
-	out PORTC, aux
-	call eepromRead 
-	out PORTB, aux
-	ret
+	rjmp writePorts2
 
 displayE:
 	ldi eepromAddress,0x8
-	call eepromRead 
-	out PORTC, aux
-	call eepromRead 
-	out PORTB, aux
-	ret
+	rjmp writePorts2
 
 displayF:
 	ldi eepromAddress,0xA
+	rjmp writePorts2
+
+writePorts2:
 	call eepromRead 
+	andi aux, 0x0F
+	in aux2, PORTC
+	andi aux2, 0xF0
+	or aux, aux2
 	out PORTC, aux
+
 	call eepromRead 
-	out PORTB, aux
+	andi aux, 0xF0
+	in aux2, PORTD
+	andi aux2, 0x0F
+	or aux, aux2
+	out PORTD, aux
 	ret
