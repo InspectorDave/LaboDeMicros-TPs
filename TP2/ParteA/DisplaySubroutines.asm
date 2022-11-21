@@ -48,17 +48,17 @@ displayValue:
 	cpi dispValue, 0x9
 	breq display9
 	cpi dispValue, 0xA
-	breq displayA_
+	breq displayA
 	cpi dispValue, 0xB
-	breq displayB_
+	breq displayB
 	cpi dispValue, 0xC
-	breq displayC_
+	breq displayC
 	cpi dispValue, 0xD
-	breq displayD_
+	breq displayD
 	cpi dispValue, 0xE
-	breq displayE_
+	breq displayE
 	cpi dispValue, 0xF
-	breq displayF_
+	breq displayF
 
 display0:
 	ldi zl, low((displayTable*2))
@@ -110,20 +110,29 @@ display9:
 	ldi zh, high((displayTable*2)+9)
 	rjmp writePorts1
 
-;Los saltos eran demasiado largos así que agrego estos saltos
-;en el medio
-displayA_:
-	rjmp displayA
-displayB_:
-	rjmp displayB
-displayC_:
-	rjmp displayC
-displayD_:
-	rjmp displayD
-displayE_:
-	rjmp displayE
-displayF_:
-	rjmp displayF
+displayA:
+	ldi eepromAddress, EEPROMdisplayA
+	rjmp writePorts2
+
+displayB:
+	ldi eepromAddress, EEPROMdisplayB
+	rjmp writePorts2
+
+displayC:
+	ldi eepromAddress, EEPROMdisplayC
+	rjmp writePorts2
+
+displayD:
+	ldi eepromAddress, EEPROMdisplayD
+	rjmp writePorts2
+
+displayE:
+	ldi eepromAddress, EEPROMdisplayE
+	rjmp writePorts2
+
+displayF:
+	ldi eepromAddress, EEPROMdisplayF
+	rjmp writePorts2
 
 writePorts1:
 	lpm aux, z
@@ -141,32 +150,8 @@ writePorts1:
 	out PORTD, aux
 	ret
 
-displayA:
-	ldi eepromAddress,0x0
-	rjmp writePorts2
-
-displayB:
-	ldi eepromAddress,0x2
-	rjmp writePorts2
-
-displayC:
-	ldi eepromAddress,0x4
-	rjmp writePorts2
-
-displayD:
-	ldi eepromAddress,0x6
-	rjmp writePorts2
-
-displayE:
-	ldi eepromAddress,0x8
-	rjmp writePorts2
-
-displayF:
-	ldi eepromAddress,0xA
-	rjmp writePorts2
-
 writePorts2:
-	call eepromRead 
+	call eepromRead
 	andi aux, 0x0F
 	in aux2, PORTC
 	andi aux2, 0xF0

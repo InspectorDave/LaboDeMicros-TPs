@@ -13,7 +13,12 @@
 
 .eseg
 .org 0x0000
-	.db dispA, dispB, dispC, dispD, dispE, dispF
+EEPROMdisplayA: .db dispA
+EEPROMdisplayB: .db dispB 
+EEPROMdisplayC: .db dispC
+EEPROMdisplayD: .db dispD
+EEPROMdisplayE: .db dispE
+EEPROMdisplayF: .db dispF
 
 .cseg
 .org 0x0000
@@ -38,7 +43,7 @@ start:
 	ldi dispValue,0
 	call displayValue
 
-	sei
+	sei	
 
 	main_loop:
 		sleep
