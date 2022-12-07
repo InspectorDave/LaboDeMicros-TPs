@@ -42,14 +42,9 @@ configureUSART:
 	ldi aux, 0
 	sts UBRR0H, aux
 
-	;Status register A de la USART
-	clr aux
-	ldi aux, ((0<<MPCM0 | 0<<U2X0) | (0<<UPE0 | 0<<DOR0)) | ((0<<FE0 | 0<<UDRE0) | (0<<TXC0 | 0<<RXC0))
-	sts UCSR0A, aux
-
 	;Status register B de la USART
 	clr aux
-	ldi aux, ((0<<TXB80 | 0<<RXB80) | (0<<UCSZ02 | 1<<TXEN0)) | ((1<<RXEN0 | 0<<UDRIE0) | (0<<TXCIE0 | 0<<RXCIE0))
+	ldi aux, (0<<TXB80 | (0<<UCSZ02 | 1<<TXEN0)) | ((1<<RXEN0 | 0<<UDRIE0) | (0<<TXCIE0 | 0<<RXCIE0))
 	sts UCSR0B, aux
 
 	;Status register C de la USART
