@@ -15,5 +15,3 @@ morseChars: .db ".-", 0, "-...", 0, "-.-.", 0, "-..", 0, ".", 0, "..-.", 0, "--.
 	; T U V W X Y Z 0 1
 	; 2 3 4 5 6 7 8 9 
 	; . , ? " \
-morseAttention: .db "-.-.-", 0 ;prosigno utilizado para empezar una trasmisión
-morseOut: .db ".-.-.", 0 ;prosigno utilizado para finalizar una trasmisión
