@@ -1,12 +1,9 @@
-/*
- * morseMap.asm
- *
- *  Created: 6/12/2022 05:08:33
- *   Author: ezequ
- */ 
+; morseMap.asm
+;
+; Created: 6/12/2022 05:08:33
+; Author: Ezequiel Mundani
 
-morseAttention: .db "-.-.-", 0
-morseOut: .db ".-.-.", 0
+; Hay 26 letras, 10 números, 5 signos de puntuación y 2 prosignos
 
 morseChars: .db ".-", 0, "-...", 0, "-.-.", 0, "-..", 0, ".", 0, "..-.", 0, "--.", 0, "....", 0, "..", 0,\
 	".---", 0, "-.-", 0, ".-..", 0, "--", 0, "-.", 0, "---", 0, ".--.", 0 , "--.-", 0, ".-.", 0, "...", 0,\
@@ -18,3 +15,5 @@ morseChars: .db ".-", 0, "-...", 0, "-.-.", 0, "-..", 0, ".", 0, "..-.", 0, "--.
 	; T U V W X Y Z 0 1
 	; 2 3 4 5 6 7 8 9 
 	; . , ? " \
+morseAttention: .db "-.-.-", 0 ;prosigno utilizado para empezar una trasmisión
+morseOut: .db ".-.-.", 0 ;prosigno utilizado para finalizar una trasmisión

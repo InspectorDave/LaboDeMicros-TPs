@@ -1,9 +1,7 @@
-/*
- * morseSubroutines.asm
- *
- *  Created: 6/12/2022 05:07:02
- *   Author: ezequ
- */ 
+; morseSubroutines.asm
+;
+; Created: 6/12/2022 05:07:02
+; Author: Ezequiel Mundani 
 
  identifyChar:
 	ldi	xh, high(readSign)
@@ -17,7 +15,7 @@
 		lpm aux2, z
 		cp aux, aux2
 		brne goToNextSign
-		lpm aux2, z+   ;Uso esto solo para incrementar z+
+		adiw zh:zl, 1
 		cpi aux, 0
 		breq matchSignWithChar
 		rjmp loop1

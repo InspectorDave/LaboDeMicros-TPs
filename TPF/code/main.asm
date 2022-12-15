@@ -7,9 +7,10 @@
 
 .def aux = r16
 .def aux2 = r17
-.def transmitChar = r18
-.def counter = r19 
-.def speed = r20
+.def aux3 = r18
+.def counter = r19
+.def transmitChar = r20
+.def topReached = r21
 
 .dseg
 .org SRAM_START
@@ -18,55 +19,79 @@
 .cseg
 .org 0x0000
 	rjmp start
+.org OC1Aaddr
+	rjmp handlerIntTimerTop
+.org ICP1addr
+	rjmp handlerIntCaptureEvent
 
 .org INT_VECTORS_SIZE
 
-start:	
+start:
+	ldi	aux, low(RAMEND)
+	out	sph, aux
+	ldi	aux, low(RAMEND)
+	out	spl, aux 
+
 	call configurePorts
 	call configureUSART
 
 	ldi	xh, high(readSign)
 	ldi	xl, low (readSign)
 
-	;;;; Hardcodeo la última secuencia Morse recibida
-	ldi aux, '-'
-	st x+, aux
-	ldi aux, '-'
-	st x+, aux
-	ldi aux, '.'
-	st x+, aux
-	ldi aux, 0
-	st x, aux
-	
-mainLoop:
-	call identifyChar
+	ldi counter, 0
+	ldi topReached, 0
 
-	call transmitUsart
+newCommunication:
+	call configureTimer1ICU1
+	sei
 
-	call delay8Mcicles
-	rjmp mainLoop
+	loopEsperarFlanco1:
+		cpi counter, 0
+		breq loopEsperarFlanco1
+		
+	call configureTimer1ICU2
+
+	loopEsperarFlanco2:
+		cpi counter, 1
+		breq loopEsperarFlanco2
+
+	call configureTimer1CTC
+
+	mainLoop:
+		call noReadingLoop
+		rjmp mainLoop
 
 configurePorts:
 	cbi DDRD, DDD0 ;configuro el pin RXD como entrada
 	sbi DDRD, DDD1 ;configuro el pin TXD como salida
-	cbi DDRD, DDD4 ;configuro el cuarto pin del puerto D como entrada (para el decodificador de audio)
+	cbi DDRB, 0    ;configuro el pin para capturar eventos
+
 	ret
 
+handlerIntCaptureEvent:
+	in aux, SREG
+	push aux
+
+	inc counter
+
+	retiHandlerIntCaptureEvent: 
+	pop aux
+	out SREG, aux
+	reti
+
+handlerIntTimerTop:
+	in aux, SREG
+	push aux
+
+	ldi topReached, 1
+
+	pop aux
+	out SREG, aux
+	reti
+
+.include "timersConfiguration.asm"
 .include "USART.asm"
-
-delay8Mcicles: ;0,5s a 16MHz
-	ldi r18, 41
-	ldi r19, 150
-	ldi r20, 125
-	L1:
-		dec r20
-		brne L1
-		dec r19
-		brne L1
-		dec r18
-		brne L1
-	nop
-	ret
-
+.include "delays.asm"
 .include "morseSubroutines.asm"
 .include "morseMap.asm"
+.include "morseRead.asm"

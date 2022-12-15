@@ -1,3 +1,8 @@
+; USART.asm
+
+; Created: 6/12/2022 05:35:45
+; Author: Ezequiel Mundani
+
 configureUSART:
 	;Baude rate
 	ldi aux, 103
@@ -25,6 +30,7 @@ configureUSART:
 transmitUSART:
 	;Compruebo que pueda enviar un nuevo byte
 	lds aux, UCSR0A
+	andi aux, 1<<UDRE0
 	sbrs aux, UDRE0
 	rjmp transmitUSART
 
@@ -32,7 +38,7 @@ transmitUSART:
 	ret
 
 receiveUSART:
-	;Cpmpruebo que pueda recibir un nuevo byte
+	;Compruebo que pueda recibir un nuevo byte
 	lds aux, UCSR0A	andi aux, 1<<RXC0
 	sbrs aux, RXC0
 	rjmp receiveUSART
